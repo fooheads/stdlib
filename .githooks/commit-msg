@@ -1,0 +1,40 @@
+#!/usr/bin/env bb
+
+; vi:syntax=clojure
+;
+;
+; .git/hooks/commit-msg
+;
+; Check for maximum line lengths
+;
+; A git hook script to check the commit log message.
+; Called by "git commit" with one argument, the name of the file
+; that has the commit message.  The hook should exit with non-zero
+; status after issuing an appropriate message if it wants to stop the
+; commit.
+
+
+(defn commit-msg-problem [commit-msg]
+  (let [lines (->> commit-msg str/split-lines (remove #(str/starts-with? % "#")))
+        [line-1, line-2] lines
+        line-rest (drop 2 lines)]
+    (cond
+      (empty? line-1)
+      "Line 1 is empty."
+
+      (<= 50 (count line-1))
+      (str "Line 1 exceeds 50 chars, was " (count line-1))
+
+      (seq line-2)
+      "Line 2 is not empty."
+
+      (and (seq line-rest) (<= 72 (apply max (map count line-rest))))
+      "Line 3 or above exceeds 72 chars.")))
+
+
+(let [commit-msg (slurp (first *command-line-args*))]
+  (when-let [problem (commit-msg-problem commit-msg)]
+    (println "!!! NOT COMMITTED !!!")
+    (println problem)
+    (System/exit 1)))
+

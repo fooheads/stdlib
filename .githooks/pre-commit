@@ -1,0 +1,16 @@
+#!/bin/sh
+# vi:set filetype=bash
+
+staged_files=$(git diff --name-only --cached --diff-filter=d | grep -E "clj$|cljs$|cljc$")
+
+if [ "${staged_files}" != "" ]; then
+  if ! (clj-kondo --lint ${staged_files}); then
+    echo "Linter warnings above, fix before commit"
+    exit 1
+  fi
+
+  if ! (cljstyle check ${staged_files}); then
+    echo "cljstyle errors, fix before commit"
+    exit 2
+  fi
+fi

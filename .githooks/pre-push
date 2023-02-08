@@ -1,0 +1,31 @@
+#!/bin/bash
+
+if [ "$(git status -s)" != "" ]; then
+  echo "Unstaged changes, commit everything before pushing"
+  echo
+  exit 1
+fi
+
+fortune | cowsay -f $(cowsay -l | grep -v "Cow files in" | tr ' ' '\n' | gshuf -n1)
+
+echo
+
+clojure -M:test/clj
+
+if [ "$?" != "0" ]; then
+  exit 1
+fi
+
+clojure -M:test/cljs
+
+if [ "$?" != "0" ]; then
+  exit 1
+fi
+
+if [ "" != "$(xmllint --xpath '//system-out/text()' target/kaocha/unit-test-result.xml)" ]; then
+  echo
+  echo "*** Remove all prn/pprint etc. before push ***"
+  echo
+  exit 1
+fi
+
