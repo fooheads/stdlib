@@ -10,7 +10,7 @@
 
 
 (def lib-name 'com.fooheads/stdlib)
-(def version "0.1.0")
+(def version "0.1.12")
 (def basis (b/create-basis {:project "deps.edn"}))
 (def jar-file-name (format "%s/%s-%s.jar" build-folder (name lib-name) version))
 
