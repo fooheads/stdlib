@@ -1,7 +1,8 @@
 (ns fooheads.stdlib
   (:require
     #?(:clj [clojure.pprint])
-    [clojure.string :as str])
+    [clojure.string :as str]
+    [fooheads.runtime :as runtime])
   #?(:cljs
      (:require-macros
        [fooheads.stdlib])))
@@ -190,3 +191,11 @@
   [x]
   (= (type x) (type example-regex)))
 
+
+(defn substring [s start end]
+  (if (= -1 end)
+    (subs s start (dec (count s)))
+    (subs s start end)))
+
+
+(def re->str runtime/re->str)

@@ -6,6 +6,7 @@
                              regex?
                              render-template template-params
                              simple-keyword
+                             substring
                              throw-ex]
      :include-macros true]
     [fooheads.test :include-macros true]))
@@ -93,4 +94,7 @@
 (deftest regex?-test
   (is (true? (regex? #"foo"))))
 
+
+(deftest substring-test
+  (is (= "o" (substring "foo" 1 -1))))
 
