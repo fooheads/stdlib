@@ -2,7 +2,9 @@
   (:require
     [clojure.test :refer [are deftest is]]
     [fooheads.stdlib :refer [dprn
-                             map-vals map-keys qualify-ident
+                             map-vals map-keys
+                             qualified-name
+                             qualify-ident
                              regex?
                              render-template template-params
                              simple-keyword
@@ -84,6 +86,20 @@
   (is (= {:msg "Unsupported combination: nil :bar" :nspace nil :nameable :bar}
          (fooheads.test/thrown-ex-data
            (qualify-ident nil :bar)))))
+
+
+(deftest qualified-name-test
+  (are [expected ident] (= expected (qualified-name ident))
+
+    "bar"     :bar
+    "bar"     'bar
+
+    "foo/bar" :foo/bar
+    "foo/bar" 'foo/bar)
+
+  (is (= {:msg "Not an ident: nil" :ident nil}
+         (fooheads.test/thrown-ex-data
+           (qualified-name nil)))))
 
 
 (deftest simple-keyword-test

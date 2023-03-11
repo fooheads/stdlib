@@ -138,6 +138,21 @@
   (map-keys (partial qualify-ident nspace) m))
 
 
+(defn qualified-name
+  "Returns a string with the qualified name of the ident"
+  [ident]
+  (cond
+    (nil? ident)
+    (let [msg "Not an ident: nil"]
+      (throw (ex-info msg {:msg msg :ident ident})))
+
+    (qualified-ident? ident)
+    (str (namespace ident) "/" (name ident))
+
+    :else
+    (name ident)))
+
+
 (defmacro guard
   "A guard that throws an exception (with msg) if v does not meet pred."
   ([pred v msg]
