@@ -111,6 +111,12 @@
   (reduce-kv (fn [m k v] (assoc m k (f v))) {} m))
 
 
+(defn dissoc-vals
+  "Dissoc elements from m for which value matches pred"
+  [m pred]
+  (apply dissoc m (for [[k v] m :when (pred v)] k)))
+
+
 (defn qualify-ident
   "Qualifies an ident. nspace and nameable must of same
   type. The nspace must be a `simple-ident?` and nameable

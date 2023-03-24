@@ -2,6 +2,7 @@
   (:require
     [clojure.test :refer [are deftest is]]
     [fooheads.stdlib :refer [dprn
+                             dissoc-vals
                              map-vals map-keys
                              qualified-name
                              qualify-ident
@@ -72,6 +73,12 @@
 
   (is (= {:a 1 :b 2}
          (map-keys keyword {"a" 1 "b" 2}))))
+
+
+(deftest dissoc-vals-test
+  (is (= {:a 1} (dissoc-vals {:a 1 :b nil} nil?)))
+  (is (= {:a 1} (dissoc-vals {:a 1 :b 2} even?)))
+  (is (nil? (dissoc-vals nil even?))))
 
 
 (deftest qualify-ident-test
