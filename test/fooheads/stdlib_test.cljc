@@ -5,6 +5,7 @@
                              map-vals map-keys
                              qualified-name
                              qualify-ident
+                             re->str
                              regex?
                              render-template template-params
                              simple-keyword
@@ -113,4 +114,8 @@
 
 (deftest substring-test
   (is (= "o" (substring "foo" 1 -1))))
+
+
+(deftest re->str-test
+  (is (= "[0-9]" (re->str #"[0-9]"))))
 
