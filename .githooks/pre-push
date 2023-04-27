@@ -10,7 +10,7 @@ fortune | cowsay -f $(cowsay -l | grep -v "Cow files in" | tr ' ' '\n' | gshuf -
 
 echo
 
-clojure -M:test/clj
+clojure -M:test
 
 if [ "$?" != "0" ]; then
   exit 1
