@@ -1,5 +1,2 @@
-{:file-ignore #{"target"
-                ".git"
-                ".cljs_node_repl"}
- :line-break-functions? false}
-
+{:files {:ignore #{".cljs_node_repl" "target" ".git"}},
+ :rules {:functions {:enabled? false}}}
