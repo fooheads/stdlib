@@ -11,6 +11,7 @@
                              render-template template-params
                              simple-keyword
                              substring
+                             stable-into
                              throw-ex]
      :include-macros true]
     [fooheads.test :include-macros true]))
@@ -125,4 +126,12 @@
 
 (deftest re->str-test
   (is (= "[0-9]" (re->str #"[0-9]"))))
+
+
+(deftest stable-into-test
+  (is (= '(1 2 3)    (stable-into '() '(1 2 3))))
+  (is (= '(1 2 3)    (stable-into '() [1 2 3])))
+  (is (= [1 2 3]     (stable-into [] [1 2 3])))
+  (is (= {:a 1 :b 2} (stable-into {} {:a 1 :b 2})))
+  (is (= {:a 1 :b 2} (stable-into {} [[:a 1] [:b 2]]))))
 

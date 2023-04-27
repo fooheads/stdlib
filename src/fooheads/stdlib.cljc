@@ -220,3 +220,16 @@
 
 
 (def re->str runtime/re->str)
+
+
+(defn stable-into
+  "Like clojure.core/into, but keeps the original order for lists.
+  Does not support transducers."
+  ([]
+   (into))
+  ([to]
+   (into to))
+  ([to from]
+   (let [from (if (list? to) (reverse from) from)]
+     (into to from))))
+
