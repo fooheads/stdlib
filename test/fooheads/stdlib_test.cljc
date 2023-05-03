@@ -1,18 +1,17 @@
 (ns fooheads.stdlib-test
   (:require
     [clojure.test :refer [are deftest is]]
-    [fooheads.stdlib :refer [dprn
-                             dissoc-vals
-                             map-vals map-keys
-                             qualified-name
-                             qualify-ident
-                             re->str
-                             regex?
-                             render-template template-params
-                             simple-keyword
-                             substring
-                             stable-into
-                             throw-ex]
+    [fooheads.stdlib :as std :refer [dprn
+                                     dissoc-vals
+                                     map-vals map-keys
+                                     qualified-name
+                                     qualify-ident
+                                     re->str
+                                     regex?
+                                     render-template template-params
+                                     simple-keyword
+                                     substring
+                                     throw-ex]
      :include-macros true]
     [fooheads.test :include-macros true]))
 
@@ -128,10 +127,15 @@
   (is (= "[0-9]" (re->str #"[0-9]"))))
 
 
-(deftest stable-into-test
-  (is (= '(1 2 3)    (stable-into '() '(1 2 3))))
-  (is (= '(1 2 3)    (stable-into '() [1 2 3])))
-  (is (= [1 2 3]     (stable-into [] [1 2 3])))
-  (is (= {:a 1 :b 2} (stable-into {} {:a 1 :b 2})))
-  (is (= {:a 1 :b 2} (stable-into {} [[:a 1] [:b 2]]))))
+(deftest into-test
+  (is (= '(1 2 3)    (std/into '() '(1 2 3))))
+  (is (= '(1 2 3)    (std/into '() [1 2 3])))
+  (is (= [1 2 3]     (std/into [] [1 2 3])))
+  (is (= {:a 1 :b 2} (std/into {} {:a 1 :b 2})))
+  (is (= {:a 1 :b 2} (std/into {} [[:a 1] [:b 2]]))))
+
+
+(deftest empty-test
+  (is (= [] (std/empty (first {:a 1}))))
+  (is (= '() (std/empty (list 1 2)))))
 

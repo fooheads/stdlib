@@ -1,4 +1,5 @@
 (ns fooheads.stdlib
+  (:refer-clojure :exclude [empty into])
   (:require
     #?(:clj [clojure.pprint])
     [clojure.string :as str]
@@ -61,7 +62,7 @@
   (->>
     symbols
     (map #(vector (keyword %) %))
-    (into {})))
+    (clojure.core/into {})))
 
 
 (defmacro throw-ex
@@ -222,7 +223,7 @@
 (def re->str runtime/re->str)
 
 
-(defn stable-into
+(defn into
   "Like clojure.core/into, but keeps the original order for lists.
   Does not support transducers."
   ([]
@@ -231,5 +232,13 @@
    (into to))
   ([to from]
    (let [from (if (list? to) (reverse from) from)]
-     (into to from))))
+     (clojure.core/into to from))))
+
+
+(defn empty
+  "Like clojure.core/empty with support for map-entry."
+  [coll]
+  (if (map-entry? coll)
+    []
+    (clojure.core/empty coll)))
 
