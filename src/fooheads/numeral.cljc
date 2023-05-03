@@ -1,6 +1,7 @@
 (ns fooheads.numeral
   (:require
     [fooheads.stdlib :refer [guard]]
+    [clojure.math :as math]
     [clojure.string :as str]))
 
 
@@ -12,11 +13,26 @@
     (vec)))
 
 
+(def ^:private default-digit-value
+  (into {}
+    (map-indexed
+      (fn [n digit]
+        [digit n])
+      default-digits)))
+
+
 (defn digit
   "Returns a digit (0-9, A-Z) for a value. Max base is 36. Returns nil for
   values outside of range."
   [n]
   (get default-digits n))
+
+
+(defn digit-value
+  "Returns the value for a digit (0-9, A-Z). Max base is 36. Returns nil for
+  values outside of range."
+  [digit]
+  (get default-digit-value digit))
 
 
 (defn digits
@@ -70,4 +86,24 @@
    (str/join (digits n base min-digits digit)))
   ([n base min-digits digit-fn]
    (str/join (digits n base min-digits digit-fn))))
+
+
+(defn value
+  "Returns the value for a string or seq of digits.
+  base defaults to 10 and digit-value-fn defaults to `digit-value`"
+  ([digits]
+   (value digits 10))
+
+  ([digits base]
+   (value digits base digit-value))
+
+  ([digits base digit-value-fn]
+   (if (string? digits)
+     (value (seq digits) base digit-value-fn)
+     (apply
+       +
+       (map-indexed
+         (fn [index digit]
+           (* (int (math/pow base index)) (digit-value-fn digit)))
+         (reverse digits))))))
 

@@ -1,7 +1,7 @@
 (ns fooheads.numeral-test
   (:require
     [clojure.test :refer [deftest is testing]]
-    [fooheads.numeral :refer [digit digits digit-string]]))
+    [fooheads.numeral :refer [digit digits digit-string value]]))
 
 
 (deftest digit-test
@@ -48,4 +48,29 @@
 
   (testing "with a digit-fn"
     (is (= "1515" (digit-string 255 16 1 identity)))))
+
+
+(deftest value-test
+  (testing "bases"
+    (is (=  10 (value [\1 \0])))
+    (is (=  10 (value "10")))
+
+    (is (=   0 (value [\0 \0] 10)))
+    (is (=  10 (value [\1 \0] 10)))
+    (is (=  10 (value "10" 10)))
+
+    (is (=   8 (value [\1 \0] 8)))
+    (is (=   8 (value "10" 8)))
+
+    (is (= 255 (value [\F \F] 16)))
+    (is (= 255 (value "FF" 16))))
+
+  (testing "with a custom digit-value function"
+    (let [digit-value-fn
+          (fn [digit] (get {\α 0 \β 1 \γ 2 \δ 3 \ε 4 \ζ 5 \η 6 \θ 7 \ι 8 \κ 9} digit))]
+      (is (= 214 (value [\γ \β \ε] 10 digit-value-fn)))
+      (is (= 214 (value "γβε" 10 digit-value-fn)))))
+
+  (testing "with leading zeroes"
+    (is (= 255 (value "00FF" 16)))))
 
