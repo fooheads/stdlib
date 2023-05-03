@@ -1,8 +1,11 @@
 (ns fooheads.numeral
   (:require
     [fooheads.stdlib :refer [guard]]
-    [clojure.math :as math]
     [clojure.string :as str]))
+
+
+(defn- pow [x y]
+  (reduce (fn [sum y] (* sum y)) 1 (repeat y x)))
 
 
 (def ^:private default-digits
@@ -104,6 +107,6 @@
        +
        (map-indexed
          (fn [index digit]
-           (* (int (math/pow base index)) (digit-value-fn digit)))
+           (* (int (pow base index)) (digit-value-fn digit)))
          (reverse digits))))))
 
