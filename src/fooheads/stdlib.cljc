@@ -242,3 +242,17 @@
     []
     (clojure.core/empty coll)))
 
+
+(defn exceptional
+  "Returns a function that applies f and uses the specified
+  get function to retrieve the value if success? returns true for the 
+  function application.
+
+  Throws an exception if success? returns something falsy."
+  [f success? get]
+  (fn [& args]
+    (let [res (apply f args)]
+      (if (success? res)
+        (get res)
+        (throw (ex-info "Exceptional failure" {:failure res}))))))
+

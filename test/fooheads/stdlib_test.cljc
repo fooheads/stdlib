@@ -1,8 +1,9 @@
 (ns fooheads.stdlib-test
   (:require
-    [clojure.test :refer [are deftest is]]
+    [clojure.test :refer [are deftest is testing]]
     [fooheads.stdlib :as std :refer [dprn
                                      dissoc-vals
+                                     exceptional
                                      map-vals map-keys
                                      qualified-name
                                      qualify-ident
@@ -138,4 +139,21 @@
 (deftest empty-test
   (is (= [] (std/empty (first {:a 1}))))
   (is (= '() (std/empty (list 1 2)))))
+
+
+(deftest exceptional-test
+  (let [success? (fn [m] (contains? m :success))
+        get-value (fn [m] (:success m))]
+
+    (testing 'success
+      (let [f (fn [x] {:success x})
+            g (exceptional f success? get-value)]
+        (is (= :foo (g :foo)))))
+
+    (testing 'failure
+      (let [f (fn [x] {:error x})
+            g (exceptional f success? get-value)]
+        (is (= {:failure {:error :foo}}
+               (fooheads.test/thrown-ex-data
+                 (g :foo))))))))
 
