@@ -152,7 +152,12 @@
 
 (deftest simple-keyword-test
   (is (simple-keyword? (simple-keyword "foo")))
-  (is (simple-keyword? (simple-keyword "foo/bar"))))
+  (is (= :foo (simple-keyword "foo")))
+
+  (is (simple-keyword? (simple-keyword "foo/bar")))
+  (is (= (keyword nil "foo/bar") (simple-keyword "foo/bar"))))
+
+
 (deftest simple-symbol-test
   (is (simple-symbol? (simple-symbol "foo")))
   (is (= 'foo (simple-symbol "foo")))
