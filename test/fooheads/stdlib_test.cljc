@@ -22,6 +22,7 @@
                                      seqt
                                      simple-keyword
                                      singleton?
+                                     simple-symbol
                                      substring
                                      throw-ex
                                      transpose
@@ -152,6 +153,14 @@
 (deftest simple-keyword-test
   (is (simple-keyword? (simple-keyword "foo")))
   (is (simple-keyword? (simple-keyword "foo/bar"))))
+(deftest simple-symbol-test
+  (is (simple-symbol? (simple-symbol "foo")))
+  (is (= 'foo (simple-symbol "foo")))
+
+  (is (simple-symbol? (simple-symbol "foo/bar")))
+  (is (= (symbol nil "foo/bar") (simple-symbol "foo/bar"))))
+
+
 
 
 (deftest regex?-test

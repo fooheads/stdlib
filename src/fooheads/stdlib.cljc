@@ -224,6 +224,13 @@
   (keyword nil s))
 
 
+(defn simple-symbol
+  "Forces a simple symbol Useful when forward slashes can
+  be present in the string `s`"
+  [s]
+  (symbol nil s))
+
+
 (def ^:private example-regex #"")
 
 
