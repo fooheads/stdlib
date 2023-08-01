@@ -20,6 +20,7 @@
                                      regex?
                                      render-template template-params
                                      seqt
+                                     simple-ident
                                      simple-keyword
                                      singleton?
                                      simple-symbol
@@ -166,6 +167,13 @@
   (is (= (symbol nil "foo/bar") (simple-symbol "foo/bar"))))
 
 
+(deftest simple-ident-test
+  (is (= :bar (simple-ident :bar)))
+  (is (= :bar (simple-ident :foo/bar)))
+  (is (= 'bar (simple-ident 'bar)))
+  (is (= 'bar (simple-ident 'foo/bar)))
+  (is (nil? (simple-ident nil)))
+  (is (nil? (simple-ident "foo/bar"))))
 
 
 (deftest regex?-test

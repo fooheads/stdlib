@@ -231,6 +231,16 @@
   (symbol nil s))
 
 
+(defn simple-ident
+  "Takes an ident and unqualifies it (removed the namespace). Returns the same
+  type of ident as was provided. Returns nil if `ident` is not an ident."
+  [ident]
+  (cond
+    (keyword? ident) (keyword (name ident))
+    (symbol? ident)  (symbol (name ident))
+    :else nil))
+
+
 (def ^:private example-regex #"")
 
 
