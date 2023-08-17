@@ -325,3 +325,11 @@
     :else
     coll))
 
+
+(defn transpose
+  "Transpose a seq of seqs. Returns a vector of vectors."
+  [xs]
+  (if (seq xs)
+    (apply mapv vector xs)
+    xs))
+

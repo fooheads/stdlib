@@ -20,7 +20,8 @@
                                      seqt
                                      simple-keyword
                                      substring
-                                     throw-ex]
+                                     throw-ex
+                                     transpose]
      :include-macros true]
     [fooheads.test :include-macros true]))
 
@@ -243,4 +244,16 @@
     [1 2]   (conjt-some [1 2] nil)
     [1]     (conjt-some nil 1)
     [1 2 3] (conjt-some [1 2] 3)))
+
+
+(deftest transpose-test
+  (are [expected actual] (exactly= expected actual)
+    nil                        (transpose nil)
+    []                         (transpose [])
+    []                         (transpose [nil nil])
+    []                         (transpose [[] []])
+    [[:a 1] [:b 2]]            (transpose [[:a :b] [1 2]])
+    [[:a 1] [:b 2]]            (transpose '((:a :b) (1 2)))
+    [[\a \1] [\b \2] [\c \3]]  (transpose ["abc" "123"])))
+
 
