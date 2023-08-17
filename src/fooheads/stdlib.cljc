@@ -173,6 +173,12 @@
     (name ident)))
 
 
+(defn named?
+  "Returns true if `clojure.core/name` can be called on x."
+  [x]
+  (or (string? x) (ident? x)))
+
+
 (defmacro guard
   "A guard that throws an exception (with msg) if v does not meet pred."
   ([pred v msg]

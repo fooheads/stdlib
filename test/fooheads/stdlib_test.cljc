@@ -12,6 +12,7 @@
                                      exactly=
                                      exceptional
                                      map-vals map-keys
+                                     named?
                                      qualified-name
                                      qualify-ident
                                      re->str
@@ -132,6 +133,18 @@
   (is (= {:msg "Not an ident: nil" :ident nil}
          (fooheads.test/thrown-ex-data
            (qualified-name nil)))))
+
+
+(deftest named?-test
+  (are [expected actual] (exactly= expected actual)
+    false (named? nil)
+    false (named? [])
+    false (named? 1)
+    true  (named? "foo")
+    true  (named? :foo)
+    true  (named? 'foo)
+    true  (named? :ns/foo)
+    true  (named? 'ns/foo)))
 
 
 (deftest simple-keyword-test
