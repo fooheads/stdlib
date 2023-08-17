@@ -264,3 +264,9 @@
     (= x y)
     (= (type x) (type y))))
 
+
+(defn seqt
+  "Like `seq` but returns the original coll if not empty"
+  [coll]
+  (if (seq coll) coll nil))
+

@@ -11,6 +11,7 @@
                                      re->str
                                      regex?
                                      render-template template-params
+                                     seqt
                                      simple-keyword
                                      substring
                                      throw-ex]
@@ -164,4 +165,19 @@
   (is (exactly= [1] [1]))
   (is (not (exactly= '() [])))
   (is (not (exactly= [1] [1 2]))))
+
+
+(deftest seqt-test
+  (are [expected actual] (exactly= expected actual)
+    nil         (seqt nil)
+    nil         (seqt [])
+    nil         (seqt (list))
+    nil         (seqt #{})
+    nil         (seqt (range 1 1))
+
+    '(1)        (seqt (list 1))
+    [1]         (seqt [1])
+    #{1}        (seqt #{1})
+    {:a 1}      (seqt {:a 1})
+    (range 1 3) (seqt (range 1 3))))
 
