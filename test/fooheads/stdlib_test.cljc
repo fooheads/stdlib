@@ -13,6 +13,7 @@
                                      exceptional
                                      map-vals map-keys
                                      named?
+                                     partition-using
                                      qualified-name
                                      qualify-ident
                                      re->str
@@ -23,7 +24,7 @@
                                      singleton?
                                      substring
                                      throw-ex
-                                     transpose]
+                                     transpose
                                      unqualify-ident]
      :include-macros true]
     [fooheads.test :include-macros true]))
@@ -292,4 +293,53 @@
     true   (singleton? [1])
     false  (singleton? [1 2])))
 
+
+;; TODO: Are these two pred generator function be in fooheads.core?
+;; Perhaps there is a better name for the functions?
+
+(defn- num-eq [n v]
+  (fn [coll]
+    (= n (count (filter #(= % v) coll)))))
+
+
+(defn- size [n]
+  (fn [coll]
+    (= n (count coll))))
+
+
+(deftest partition-using-test
+  (is (= []
+         (partition-using any? nil)))
+
+  (is (= []
+         (partition-using any? [])))
+
+  (is (= [[1]]
+         (partition-using any? [1])))
+
+  (is (= [[1] [2] [3]]
+         (partition-using any? [1 2 3])))
+
+  (is (= [[1 2 3]]
+         (partition-using (size 10) [1 2 3])))
+
+  (is (= [[1 2] [3 4] [5]]
+         (partition-using (size 2) [1 2 3 4 5])))
+
+  (is (= '[[| 1 | 2 | 3 |]]
+         (partition-using (num-eq 4 '|)
+                          '[| 1 | 2 | 3 |])))
+
+  (is (= '[[| 1 | 2 | 3 |]
+           [| 4 | 5 | 6 |]]
+         (partition-using (num-eq 4 '|)
+                          '[| 1 | 2 | 3 |   | 4 | 5 | 6 |])))
+
+  (is (= '[[| 1 | 2 | 3 |]
+           [| 4 | 5 | 6 |]
+           [| 7 | 8 | 9 |]]
+         (partition-using (num-eq 4 '|)
+                          '[| 1 | 2 | 3 |
+                            | 4 | 5 | 6 |
+                            | 7 | 8 | 9 |]))))
 

@@ -358,3 +358,24 @@
   [coll]
   (= 1 (count coll)))
 
+
+(defn partition-using
+  "Collects values to a partition until the pred is true for the partition,
+  and then starts a new partition.  If pred never is true, all values ends
+  up in a single partition.  Returns a lazy seq of partitions.
+
+  When I grow up, I want to return a (stateful) transducer when only pred is
+  provided."
+  ([pred coll]
+   (lazy-seq
+     (when-let [s (seq coll)]
+       (loop [s s
+              run []]
+         (if (empty? s)
+           [run]
+           (let [run (conj run (first s))
+                 s (lazy-seq (rest s))]
+             (if (pred run)
+               (cons run (partition-using pred s))
+               (recur s run)))))))))
+
