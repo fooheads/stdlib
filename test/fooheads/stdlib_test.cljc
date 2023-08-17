@@ -3,6 +3,7 @@
     [clojure.test :refer [are deftest is testing]]
     [fooheads.stdlib :as std :refer [dprn
                                      dissoc-vals
+                                     exactly=
                                      exceptional
                                      map-vals map-keys
                                      qualified-name
@@ -156,4 +157,11 @@
         (is (= {:failure {:error :foo}}
                (fooheads.test/thrown-ex-data
                  (g :foo))))))))
+
+
+(deftest exactly=-test
+  (is (exactly= [] []))
+  (is (exactly= [1] [1]))
+  (is (not (exactly= '() [])))
+  (is (not (exactly= [1] [1 2]))))
 

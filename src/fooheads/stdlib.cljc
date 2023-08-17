@@ -256,3 +256,11 @@
         (get res)
         (throw (ex-info "Exceptional failure" {:failure res}))))))
 
+
+(defn exactly=
+  "Checks that `=` is true and that both x and y are of the same type."
+  [x y]
+  (and
+    (= x y)
+    (= (type x) (type y))))
+
