@@ -22,6 +22,7 @@
                                      substring
                                      throw-ex
                                      transpose]
+                                     unqualify-ident]
      :include-macros true]
     [fooheads.test :include-macros true]))
 
@@ -104,6 +105,19 @@
   (is (= {:msg "Unsupported combination: nil :bar" :nspace nil :nameable :bar}
          (fooheads.test/thrown-ex-data
            (qualify-ident nil :bar)))))
+
+
+(deftest unqualify-ident-test
+  (are [expected actual] (= expected actual)
+
+    :bar (unqualify-ident :foo/bar)
+    'bar (unqualify-ident 'foo/bar))
+
+  (is (= {:msg "Can't unqualify 1" :ident 1}
+         (fooheads.test/thrown-ex-data (unqualify-ident 1))))
+
+  (is (= {:msg "Can't unqualify nil" :ident nil}
+         (fooheads.test/thrown-ex-data (unqualify-ident nil)))))
 
 
 (deftest qualified-name-test

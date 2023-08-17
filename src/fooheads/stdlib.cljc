@@ -139,6 +139,19 @@
                msg {:msg msg :nspace nspace :nameable nameable})))))
 
 
+(defn unqualify-ident [ident]
+  (cond
+    (symbol? ident)
+    (symbol (name ident))
+
+    (keyword? ident)
+    (keyword (name ident))
+
+    :else
+    (let [msg (str "Can't unqualify " (or ident "nil"))]
+      (throw (ex-info msg {:msg msg :ident ident})))))
+
+
 (defn qualify-keys
   "Qualify all the keys in a map"
   [m nspace]
