@@ -352,3 +352,9 @@
     (apply mapv vector xs)
     xs))
 
+
+(defn singleton?
+  "Returns true if the `coll` has exactly one element, false otherwise."
+  [coll]
+  (= 1 (count coll)))
+

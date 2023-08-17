@@ -20,6 +20,7 @@
                                      render-template template-params
                                      seqt
                                      simple-keyword
+                                     singleton?
                                      substring
                                      throw-ex
                                      transpose]
@@ -282,5 +283,13 @@
     [[:a 1] [:b 2]]            (transpose [[:a :b] [1 2]])
     [[:a 1] [:b 2]]            (transpose '((:a :b) (1 2)))
     [[\a \1] [\b \2] [\c \3]]  (transpose ["abc" "123"])))
+
+
+(deftest singleton?-test
+  (are [expected actual] (exactly= expected actual)
+    false  (singleton? nil)
+    false  (singleton? [])
+    true   (singleton? [1])
+    false  (singleton? [1 2])))
 
 
