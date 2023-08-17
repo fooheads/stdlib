@@ -1,7 +1,13 @@
 (ns fooheads.stdlib-test
   (:require
     [clojure.test :refer [are deftest is testing]]
-    [fooheads.stdlib :as std :refer [dprn
+    [fooheads.stdlib :as std :refer [conj-some
+                                     conjt
+                                     conjt-some
+                                     cons-some
+                                     const-some
+                                     const
+                                     dprn
                                      dissoc-vals
                                      exactly=
                                      exceptional
@@ -180,4 +186,61 @@
     #{1}        (seqt #{1})
     {:a 1}      (seqt {:a 1})
     (range 1 3) (seqt (range 1 3))))
+
+
+(deftest const-test
+  (are [expected actual] (exactly= expected actual)
+    '(nil)      (const nil nil)
+    '(1)        (const 1 nil)
+    '(1 2 3)    (const 1 '(2 3))
+    [1 2 3]     (const 1 [2 3])
+    #{1 2 3}    (const 1 #{2 3})
+    {:a 1 :b 2} (const [:b 2] {:a 1})
+    '(1 2 3)    (const 1 (range 2 4))))
+
+
+(deftest conjt-test
+  (are [expected actual] (exactly= expected actual)
+    [nil]       (conjt nil nil)
+    [1]         (conjt nil 1)
+    [1 2 3]     (conjt [1 2] 3)
+    #{1 2 3}    (conjt #{1 2} 3)
+    {:a 1 :b 2} (conjt {:a 1} [:b 2]))
+
+  (is (= {:coll '(2 3) :x 1
+          :msg "Can't conjt on `seq?` collections."}
+         (fooheads.test/thrown-ex-data
+           (conjt '(2 3) 1)))))
+
+
+(deftest cons-some-test
+  (are [expected actual] (= expected actual)
+    nil      (cons-some nil nil)
+    '(1 2)   (cons-some nil [1 2])
+    '(1)     (cons-some 1 nil)
+    '(1 2 3) (cons-some 1 [2 3])))
+
+
+(deftest conj-some-test
+  (are [expected actual] (exactly= expected actual)
+    nil      (conj-some nil nil)
+    [1 2]    (conj-some [1 2] nil)
+    '(1)     (conj-some nil 1)
+    [1 2 3]  (conj-some [1 2] 3)))
+
+
+(deftest const-some-test
+  (are [expected actual] (exactly= expected actual)
+    nil     (const-some nil nil)
+    [1 2]   (const-some nil [1 2])
+    '(1)    (const-some 1 nil)
+    [1 2 3] (const-some 1 [2 3])))
+
+
+(deftest conjt-some-test
+  (are [expected actual] (exactly= expected actual)
+    []      (conjt-some nil nil)
+    [1 2]   (conjt-some [1 2] nil)
+    [1]     (conjt-some nil 1)
+    [1 2 3] (conjt-some [1 2] 3)))
 

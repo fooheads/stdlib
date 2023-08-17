@@ -270,3 +270,58 @@
   [coll]
   (if (seq coll) coll nil))
 
+
+(defn const
+  "Like `cons` but keeps the collection type."
+  [x coll]
+  (into (empty coll) (cons x coll)))
+
+
+(defn conjt
+  "Like `conj`, keeps the collection type and throws error for `seq?` collections,
+  since it would be very slow (and in the \"wrong\" order). If coll is nil,
+  defaults to vector (instead of list as conj does)."
+  [coll x]
+  (cond
+    (nil? coll)
+    (conjt [] x)
+
+    (seq? coll)
+    (let [msg "Can't conjt on `seq?` collections."]
+      (throw (ex-info msg {:msg msg :coll coll :x x})))
+
+    :else
+    (conj coll x)))
+
+
+(defn cons-some
+  "Like `cons` but does not add x if x is nil."
+  [x coll]
+  (if x (cons x coll) (seq coll)))
+
+
+(defn conj-some
+  "Like `conj` but does not add x if x is nil."
+  [coll x]
+  (if x (conj coll x) coll))
+
+
+(defn const-some
+  "Like `const` but does not add x if x is nil."
+  [x coll]
+  (if x (const x coll) coll))
+
+
+(defn conjt-some
+  "Like `conjt` but does not add x if x is nil."
+  [coll x]
+  (cond
+    (nil? coll)
+    (conjt-some [] x)
+
+    (some? x)
+    (conjt coll x)
+
+    :else
+    coll))
+
