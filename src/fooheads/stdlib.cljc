@@ -362,6 +362,33 @@
     coll))
 
 
+(defn removet
+  "Like `remove` but keeps the collection type."
+  [pred coll]
+  (into (empty coll) (remove pred coll)))
+
+
+(defn filtert
+  "Like `filter` but keeps the collection type."
+  [pred coll]
+  (into (empty coll) (filter pred coll)))
+
+
+(defn mapt
+  "Like `map` but keeps the collection type. For maps, it assumes that
+  f returns a pair/map-entry, in order to successfully turn the values
+  into a map again. When multiple collections are provided, the type of
+  the first collection determines the return type."
+  ([f coll]
+   (into (empty coll) (map f coll)))
+  ([f c1 c2]
+   (into (empty c1) (map f c1 c2)))
+  ([f c1 c2 c3]
+   (into (empty c1) (map f c1 c2 c3)))
+  ([f c1 c2 c3 & colls]
+   (into (empty c1) (apply map f c1 c2 c3 colls))))
+
+
 (defn transpose
   "Transpose a seq of seqs. Returns a vector of vectors."
   [xs]

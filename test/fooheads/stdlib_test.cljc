@@ -11,13 +11,17 @@
                                      dissoc-vals
                                      exactly=
                                      exceptional
-                                     map-vals map-keys
+                                     filtert
+                                     map-vals
+                                     map-keys
+                                     mapt
                                      named?
                                      partition-using
                                      qualified-name
                                      qualify-ident
                                      re->str
                                      regex?
+                                     removet
                                      render-template template-params
                                      seqt
                                      simple-ident
@@ -295,6 +299,39 @@
     [1 2]   (conjt-some [1 2] nil)
     [1]     (conjt-some nil 1)
     [1 2 3] (conjt-some [1 2] 3)))
+
+
+(deftest removet-test
+  (are [expected actual] (exactly= expected actual)
+    nil    (removet even? nil)
+    '(1 3) (removet even? '(1 2 3))
+    [1 3]  (removet even? [1 2 3])
+    #{1 3} (removet even? #{1 2 3})
+    {:b 2} (removet #(= [:a 1] %) {:a 1 :b 2})))
+
+
+(deftest filtert-test
+  (are [expected actual] (exactly= expected actual)
+    nil    (filtert odd? nil)
+    '(1 3) (filtert odd? '(1 2 3))
+    [1 3]  (filtert odd? [1 2 3])
+    #{1 3} (filtert odd? #{1 2 3})
+    {:b 2} (filtert #(= [:b 2] %) {:a 1 :b 2})))
+
+
+(deftest mapt-test
+  (are [expected actual] (exactly= expected actual)
+    nil         (mapt inc nil)
+    '(2 3)      (mapt inc '(1 2))
+    [2 3]       (mapt inc [1 2])
+    #{2 3}      (mapt inc #{1 2})
+    {:a 2 :b 3} (mapt (fn [[k v]] [k (inc v)]) {:a 1 :b 2})
+
+    [5 7 9]     (mapt + [1 2 3] [4 5 6])
+    '(12 15 18) (mapt + '(1 2 3) [4 5 6] [7 8 9])
+    #{6}        (mapt + #{1} [2] '(3))
+
+    [5 10]      (mapt + [1 2] [1 2] [1 2] [1 2] [1 2])))
 
 
 (deftest transpose-test
