@@ -448,7 +448,7 @@
             (update partitions partition-idx conjt x)
             (let [rest-idx (dec (count partitions))]
               (update partitions rest-idx conjt x))))
-        (into [[]] (->> (repeatedly vector) (take (count indexes))))
+        (conjt (mapt empty indexes) [])
         (map vector xs (range)))
       [])))
 
@@ -458,15 +458,13 @@
 
   Example: (select-indexes [0 2] [:a :b :c :d]) ; => [:a :c]"
   [indexes xs]
-  (let [[left _right] (partition-indexes [indexes] xs)]
-    left))
+  (first (partition-indexes [indexes] xs)))
 
 
 (defn remove-indexes
   "Removes the items at the indexes.
 
-  Example: (select-indexes [0 2] [:a :b :c :d]) ; => [:a :c]"
+  Example: (remove-indexes [0 2] [:a :b :c :d]) ; => [:b :d]"
   [indexes xs]
-  (let [[_left right] (partition-indexes [indexes] xs)]
-    right))
+  (last (partition-indexes [indexes] xs)))
 
