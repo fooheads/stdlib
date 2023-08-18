@@ -12,16 +12,19 @@
                                      exactly=
                                      exceptional
                                      filtert
+                                     filter-indexes
                                      map-vals
                                      map-keys
                                      mapt
                                      named?
                                      partition-using
+                                     partition-indexes
                                      qualified-name
                                      qualify-ident
                                      re->str
                                      regex?
                                      removet
+                                     remove-indexes
                                      render-template template-params
                                      seqt
                                      simple-ident
@@ -401,4 +404,33 @@
                           '[| 1 | 2 | 3 |
                             | 4 | 5 | 6 |
                             | 7 | 8 | 9 |]))))
+
+
+(deftest partition-indexes-test
+  (are [expected actual] (= expected actual)
+    []                     (partition-indexes [] [])
+    [[:a]]                 (partition-indexes [] [:a])
+    [[:a] []]              (partition-indexes [[0]] [:a])
+    [[] [:a]]              (partition-indexes [[]] [:a])
+    [[:a :d] [:b] [:c :e]] (partition-indexes [[0 3] [1]] [:a :b :c :d :e])))
+
+
+(deftest filter-indexes-test
+  (are [expected actual] (= expected actual)
+    []         (filter-indexes [] [:a :b :c])
+    [:a]       (filter-indexes [0] [:a :b :c])
+    [:a :b]    (filter-indexes [0 1] [:a :b :c])
+    [:b :c]    (filter-indexes [1 2] [:a :b :c])
+    [:a :b :c] (filter-indexes [0 1 2] [:a :b :c])
+    [:a :b :c] (filter-indexes [0 1 2 3] [:a :b :c])))
+
+
+(deftest remove-indexes-test
+  (are [expected actual] (= expected actual)
+    [:a :b :c] (remove-indexes [] [:a :b :c])
+    [:b :c]    (remove-indexes [0] [:a :b :c])
+    [:c]       (remove-indexes [0 1] [:a :b :c])
+    [:a]       (remove-indexes [1 2] [:a :b :c])
+    []         (remove-indexes [0 1 2] [:a :b :c])
+    []         (remove-indexes [0 1 2 3] [:a :b :c])))
 

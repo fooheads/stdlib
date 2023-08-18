@@ -423,3 +423,50 @@
                (cons run (partition-using pred s))
                (recur s run)))))))))
 
+
+(defn partition-indexes
+  "Partitions the seq into the number of specified index partitions.
+  If the index is not specified, it will be put in the last partition.
+
+  Example:
+    (partition-indexes [[0 3] [1]] [:a :b :c :d :e])
+    ;=> [[:a :d] [:b] [:c :e]]
+  "
+  [indexes xs]
+  (let [partition-index (fn [indexes]
+                          (->>
+                            (map vector indexes (range))
+                            (mapcat (fn [[idxs i]] (map (fn [idx] [idx i]) idxs)))
+                            (into {})))
+
+        partition-index (partition-index indexes)]
+
+    (if (seq xs)
+      (reduce
+        (fn [partitions [x index]]
+          (if-let [partition-idx (partition-index index)]
+            (update partitions partition-idx conjt x)
+            (let [rest-idx (dec (count partitions))]
+              (update partitions rest-idx conjt x))))
+        (into [[]] (->> (repeatedly vector) (take (count indexes))))
+        (map vector xs (range)))
+      [])))
+
+
+(defn filter-indexes
+  "Selects the items at the indexes.
+
+  Example: (select-indexes [0 2] [:a :b :c :d]) ; => [:a :c]"
+  [indexes xs]
+  (let [[left _right] (partition-indexes [indexes] xs)]
+    left))
+
+
+(defn remove-indexes
+  "Removes the items at the indexes.
+
+  Example: (select-indexes [0 2] [:a :b :c :d]) ; => [:a :c]"
+  [indexes xs]
+  (let [[_left right] (partition-indexes [indexes] xs)]
+    right))
+
