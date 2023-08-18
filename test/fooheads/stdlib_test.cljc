@@ -412,7 +412,8 @@
     [[:a]]                 (partition-indexes [] [:a])
     [[:a] []]              (partition-indexes [[0]] [:a])
     [[] [:a]]              (partition-indexes [[]] [:a])
-    [[:a :d] [:b] [:c :e]] (partition-indexes [[0 3] [1]] [:a :b :c :d :e])))
+    [[:a :d] [:b] [:c :e]] (partition-indexes [[0 3] [1]] [:a :b :c :d :e])
+    [[:a :d] [:b] [:c :e]] (partition-indexes ['(0 3) [1]] [:a :b :c :d :e])))
 
 
 (deftest filter-indexes-test

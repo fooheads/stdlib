@@ -279,6 +279,12 @@
     (clojure.core/empty coll)))
 
 
+(defn empty-vec
+  "Create an empty vector"
+  [& _args]
+  (empty []))
+
+
 (defn exceptional
   "Returns a function that applies f and uses the specified
   get function to retrieve the value if success? returns true for the
@@ -448,7 +454,7 @@
             (update partitions partition-idx conjt x)
             (let [rest-idx (dec (count partitions))]
               (update partitions rest-idx conjt x))))
-        (conjt (mapt empty indexes) [])
+        (conjt (mapt empty-vec indexes) [])
         (map vector xs (range)))
       [])))
 
