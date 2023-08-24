@@ -474,3 +474,15 @@
   [indexes xs]
   (last (partition-indexes [indexes] xs)))
 
+
+(defn index-of-all
+  "Returns the indexes of all elements matching pred in coll"
+  [pred coll]
+  (keep-indexed #(when (pred %2) %1) coll))
+
+
+(defn index-of
+  "Returns the index of the first element matching pred in coll"
+  [pred coll]
+  (first (index-of-all pred coll)))
+

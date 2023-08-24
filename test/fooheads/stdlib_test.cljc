@@ -13,6 +13,8 @@
                                      exceptional
                                      filtert
                                      filter-indexes
+                                     index-of
+                                     index-of-all
                                      map-vals
                                      map-keys
                                      mapt
@@ -434,4 +436,18 @@
     [:a]       (remove-indexes [1 2] [:a :b :c])
     []         (remove-indexes [0 1 2] [:a :b :c])
     []         (remove-indexes [0 1 2 3] [:a :b :c])))
+
+
+(deftest index-of-test
+  (are [expected actual] (= expected actual)
+    nil (index-of #{9} [1 2 3])
+    1 (index-of #{2} [1 2 3])
+    1 (index-of even? [1 2 3])))
+
+
+(deftest index-of-all-test
+  (are [expected actual] (= expected actual)
+    [1]   (index-of-all even? [1 2 3])
+    [0 2] (index-of-all odd? [1 2 3])
+    []    (index-of-all odd? [2 4 6])))
 
