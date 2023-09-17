@@ -15,12 +15,30 @@
 
 
 (defmacro thrown-ex-data
-  [body]
-  `(try
-     ~body
-     (throw (ex-info "Exception was not thrown" {:expected-exception :was-not-thrown}))
-     (catch ~(ex-symbol &env) e#
-       (ex-data e#))))
+  "Catches an exception in `body` and extracts the ex-data, to make it easy to
+  test exceptional code. If `ks` is given, these keys are extracted from the
+  ex-data map.
+
+  If an exception is not thrown, it returns
+  `{:expected-exception :was-not-thrown}`"
+  ([body]
+   `(thrown-ex-data nil ~body))
+  ([ks body]
+   `(try
+      ~body
+      (throw (ex-info "Exception was not thrown" {:expected-exception :was-not-thrown}))
+      (catch ~(ex-symbol &env) e#
+        (let [ks# ~ks
+              data# (ex-data e#)]
+          (cond
+            (contains? data# :expected-exception)
+            data#
+
+            (nil? ks#)
+            data#
+
+            :else
+            (select-keys data# ks#)))))))
 
 
 (defmacro should-be
