@@ -28,6 +28,8 @@
                                      removet
                                      remove-indexes
                                      render-template template-params
+                                     seq->
+                                     seq->>
                                      seqt
                                      simple-ident
                                      simple-keyword
@@ -450,4 +452,18 @@
     [1]   (index-of-all even? [1 2 3])
     [0 2] (index-of-all odd? [1 2 3])
     []    (index-of-all odd? [2 4 6])))
+
+
+(deftest seq->-test
+  (is (nil?  (seq-> nil)))
+  (is (nil?  (seq-> {})))
+  (is (nil?  (seq-> {:a 1} (dissoc :a) (vals))))
+  (is (= [2] (seq-> {:a 1 :b 2} (dissoc :a) (vals)))))
+
+
+(deftest seq->>-test
+  (is (nil? (seq->> nil)))
+  (is (nil? (seq->> [])))
+  (is (nil? (seq->> [2 4 6] (filter odd?) (apply +))))
+  (is (= 4  (seq->> [1 2 3] (filter odd?) (apply +)))))
 

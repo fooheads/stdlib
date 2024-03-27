@@ -1,0 +1,3 @@
+{:lint-as {fooheads.stdlib/seq-> clojure.core/->
+           fooheads.stdlib/seq->> clojure.core/->>}}
+

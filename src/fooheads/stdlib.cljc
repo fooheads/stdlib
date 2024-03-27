@@ -486,3 +486,32 @@
   [pred coll]
   (first (index-of-all pred coll)))
 
+
+(defmacro seq->
+  "When expr is a seq (`clojure.core/seq` not returns nil), threads it into the
+  first form (via ->), and when that result is a seq, through the next etc"
+  [expr & forms]
+  (let [g (gensym)
+        steps (map (fn [step] `(if (seq ~g) (-> ~g ~step) nil))
+                   forms)]
+    `(let [v# ~expr
+           ~g (if (seq v#) v# nil)
+           ~@(interleave (repeat g) (butlast steps))]
+       ~(if (empty? steps)
+          g
+          (last steps)))))
+
+
+(defmacro seq->>
+  "When expr is a seq (`clojure.core/seq not returns nil), threads it into the
+  first form (via ->>), and when that result is a seq, through the next etc"
+  [expr & forms]
+  (let [g (gensym)
+        steps (map (fn [step] `(if (seq ~g) (->> ~g ~step) nil))
+                   forms)]
+    `(let [v# ~expr
+           ~g (if (seq v#) v# nil)
+           ~@(interleave (repeat g) (butlast steps))]
+       ~(if (empty? steps)
+          g
+          (last steps)))))
