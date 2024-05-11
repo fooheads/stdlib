@@ -515,3 +515,10 @@
        ~(if (empty? steps)
           g
           (last steps)))))
+
+
+(defmacro forv
+  "Just like `clojure.core/for`, but removes lazyness and returns a vector."
+  [seq-exprs body-expr]
+  `(vec (for ~seq-exprs ~body-expr)))
+

@@ -13,6 +13,7 @@
                                      exceptional
                                      filtert
                                      filter-indexes
+                                     forv
                                      index-of
                                      index-of-all
                                      map-vals
@@ -466,4 +467,16 @@
   (is (nil? (seq->> [])))
   (is (nil? (seq->> [2 4 6] (filter odd?) (apply +))))
   (is (= 4  (seq->> [1 2 3] (filter odd?) (apply +)))))
+
+
+(deftest forv-test
+  (is (= [2 4]
+         (forv [i (range 1 6)
+                :when (even? i)]
+               i)))
+
+  (is (vector?
+        (forv [i (range 1 6)
+               :when (even? i)]
+              i))))
 
