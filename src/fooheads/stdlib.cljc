@@ -522,3 +522,31 @@
   [seq-exprs body-expr]
   `(vec (for ~seq-exprs ~body-expr)))
 
+
+(defn some-partition
+  "`some` pred for each partition."
+  ([pred n coll]
+   (some-partition pred n n coll))
+  ([pred n step coll]
+   (some-partition pred n step [] coll))
+  ([pred n step pad coll]
+   (some
+     (fn [xs]
+       (when (apply pred xs)
+         xs))
+     (partition n step pad coll))))
+
+
+(defn every-partition?
+  "Is pred true for every partition?"
+  ([pred n coll]
+   (every-partition? pred n n coll))
+  ([pred n step coll]
+   (every-partition? pred n step [] coll))
+  ([pred n step pad coll]
+   (every?
+     (fn [xs]
+       (when (apply pred xs)
+         xs))
+     (partition n step pad coll))))
+

@@ -9,6 +9,7 @@
                                      const
                                      dprn
                                      dissoc-vals
+                                     every-partition?
                                      exactly=
                                      exceptional
                                      filtert
@@ -36,6 +37,7 @@
                                      simple-keyword
                                      singleton?
                                      simple-symbol
+                                     some-partition
                                      substring
                                      throw-ex
                                      transpose
@@ -479,4 +481,14 @@
         (forv [i (range 1 6)
                :when (even? i)]
               i))))
+
+
+(deftest some-partition-test
+  (is (nil? (some-partition > 2 [1 2 3 4 5 6])))
+  (is (= [4 3] (some-partition > 2 [1 2 4 3 5 6]))))
+
+
+(deftest every-partition?-test
+  (is (true? (every-partition? < 2 [1 2 3 4 5 6])))
+  (is (false? (every-partition? < 2 [1 2 4 3 5 6]))))
 
