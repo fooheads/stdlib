@@ -527,8 +527,14 @@
   "`some` pred for each partition."
   ([pred n coll]
    (some-partition pred n n coll))
+
   ([pred n step coll]
-   (some-partition pred n step [] coll))
+   (some
+     (fn [xs]
+       (when (apply pred xs)
+         xs))
+     (partition n step coll)))
+
   ([pred n step pad coll]
    (some
      (fn [xs]
@@ -541,8 +547,14 @@
   "Is pred true for every partition?"
   ([pred n coll]
    (every-partition? pred n n coll))
+
   ([pred n step coll]
-   (every-partition? pred n step [] coll))
+   (every?
+     (fn [xs]
+       (when (apply pred xs)
+         xs))
+     (partition n step coll)))
+
   ([pred n step pad coll]
    (every?
      (fn [xs]

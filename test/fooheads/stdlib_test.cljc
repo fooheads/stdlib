@@ -483,12 +483,27 @@
               i))))
 
 
+(defn- lt [x y] (< x y))
+(defn- gt [x y] (> x y))
+
+
 (deftest some-partition-test
-  (is (nil? (some-partition > 2 [1 2 3 4 5 6])))
-  (is (= [4 3] (some-partition > 2 [1 2 4 3 5 6]))))
+  (is (= [4 3] (some-partition gt 2 [1 2 4 3 5 6])))
+  (is (nil? (some-partition gt 2 [1 2 3 4 5 6])))
+
+  (is (nil? (some-partition gt 2 [])))
+  (is (nil? (some-partition gt 2 [1])))
+  (is (nil? (some-partition gt 2 [1 2])))
+  (is (nil? (some-partition gt 2 2 [1 2 3 4 5])))
+  (is (nil? (some-partition gt 2 2 [1 2 3 4 0])))  ; last element discarded
+  (is (= [5 0] (some-partition gt 2 2 [10000] [1 2 3 4 5 0]))))
 
 
 (deftest every-partition?-test
-  (is (true? (every-partition? < 2 [1 2 3 4 5 6])))
-  (is (false? (every-partition? < 2 [1 2 4 3 5 6]))))
+  (is (true? (every-partition? lt 2 [1 2 3 4 5 6])))
+  (is (false? (every-partition? lt 2 [1 2 4 3 5 6])))
+
+  (is (true? (every-partition? lt 2 2 [1 2 3 4 0])))  ; last element discarded
+  (is (false? (every-partition? gt 2 2 [10000] [1 2 3 4 5 0])))
+  (is (false? (every-partition? lt 2 1 [1 2 3 4 0]))))
 
