@@ -7,6 +7,7 @@
                                      cons-some
                                      const-some
                                      const
+                                     contains-in?
                                      dprn
                                      dissoc-vals
                                      every-partition?
@@ -506,4 +507,14 @@
   (is (true? (every-partition? lt 2 2 [1 2 3 4 0])))  ; last element discarded
   (is (false? (every-partition? gt 2 2 [10000] [1 2 3 4 5 0])))
   (is (false? (every-partition? lt 2 1 [1 2 3 4 0]))))
+
+
+(deftest contains-in?-test
+  (is (true? (contains-in? {:a 1} [:a])))
+  (is (true? (contains-in? {:a {:b 1}} [:a :b])))
+  (is (true? (contains-in? {:a {:b nil}} [:a :b])))
+  (is (true? (contains-in? [[10 11]] [0 1])))
+
+  (is (false? (contains-in? {:a {:b 1}} [:a :c])))
+  (is (false? (contains-in? [[10 11]] [1 1]))))
 

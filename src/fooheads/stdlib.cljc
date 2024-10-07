@@ -562,3 +562,22 @@
          xs))
      (partition n step pad coll))))
 
+
+(defn contains-in?
+  "A recursive version of `clojure.core/contains?`."
+  [coll ks]
+  (loop
+    [coll coll
+     [k & ks] ks
+     contains false]
+
+    (cond
+      (not k)
+      contains
+
+      (contains? coll k)
+      (recur (coll k) ks true)
+
+      :else
+      false)))
+
