@@ -1,4 +1,4 @@
-# Fooheads Stdlib
+# fooheads stdlib
 
 fooheads stdlib is a collection of utility functions and macros for clojure and clojurescript projects. It provides helpers for sequence manipulation, string templating, numeral conversion and more. The library is published under the coordinates `com.fooheads/stdlib`.
 
