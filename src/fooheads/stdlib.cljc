@@ -100,13 +100,13 @@
            (clojure.pprint/pprint ~symbol-map#))))))
 
 
-(defn map-keys
+(defn ^{:deprecated "Use clojure.core/update-keys"} map-keys
   "Apply f to all keys in m"
   [f m]
   (reduce-kv (fn [m k v] (assoc m (f k) v)) {} m))
 
 
-(defn map-vals
+(defn ^{:deprecated "Use clojure.core/update-vals"} map-vals
   "Apply f to all values in m"
   [f m]
   (reduce-kv (fn [m k v] (assoc m k (f v))) {} m))
@@ -580,4 +580,5 @@
 
       :else
       false)))
+
 
